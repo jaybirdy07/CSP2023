@@ -1,0 +1,113 @@
+#   Add your code here and add comments to your code 
+#   to describe what each section of code is doing
+
+# import turtle module
+import turtle as trtl
+
+# create turtle object
+painter = trtl.Turtle()
+
+#set color
+painter.pensize(5)
+painter.pencolor("orange")
+painter.fillcolor("orange")
+
+#draw boat base
+painter.begin_fill()
+painter.forward(50)
+painter.circle(30,60)
+painter.left(118)
+painter.forward(90)
+painter.left(100)
+painter.circle(20,55)
+painter.end_fill()
+
+#draw pole
+painter.pencolor("grey")
+painter.penup()
+painter.goto(30,20)
+painter.pendown()
+painter.left(110)
+painter.forward(100)
+
+#draw sail 1
+painter.pencolor("tan")
+painter.fillcolor("tan")
+painter.penup()
+painter.goto(30,25)
+painter.pendown()
+painter.begin_fill()
+painter.right(80)
+painter.forward(50)
+painter.left(50)
+painter.circle(55,115)
+painter.left(100)
+painter.forward(85)
+painter.end_fill()
+
+#draw sail 2
+painter.penup()
+painter.goto(35,110)
+painter.pendown()
+painter.begin_fill()
+painter.right(50)
+painter.circle(140,42)
+painter.left(100)
+painter.circle(100,25)
+painter.left(58)
+painter.forward(78)
+painter.end_fill()
+
+#draw ocean
+painter.penup()
+painter.goto(-188,15)
+painter.pendown()
+painter.pencolor("blue")
+painter.fillcolor("blue")
+painter.begin_fill()
+painter.right(150)
+painter.circle(20,140)
+painter.right(148)
+painter.circle(20,140)
+painter.right(140)
+painter.circle(20,140)
+painter.right(140)
+painter.circle(20,140)
+painter.right(138)
+painter.circle(20,140)
+painter.right(137)
+painter.circle(20,140)
+painter.right(135)
+painter.circle(20,140)
+painter.right(145)
+painter.circle(20,140)
+painter.right(145)
+painter.circle(20,140)
+painter.right(145)
+painter.circle(20,140)
+painter.right(150)
+painter.forward(200)
+painter.right(90)
+painter.forward(375)
+painter.right(90)
+painter.forward(200)
+painter.end_fill()
+
+#draw sun
+painter.penup()
+painter.goto(-100,100)
+painter.pendown()
+painter.fillcolor("yellow")
+painter.pencolor("yellow")
+painter.begin_fill()
+painter.circle(20)
+painter.end_fill()
+
+
+
+# create screen object and make it persist
+wn = trtl.Screen()
+wn.mainloop()
+
+
+
