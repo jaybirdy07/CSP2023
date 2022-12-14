@@ -10,7 +10,6 @@ wn.setup(width=1.0, height=1.0)
 
 font_setup = ("Arial", 20, "normal")
 timer = 400
-score = 0
 counter_interval = 1000   #1000 represents 1 second
 timer_up = False
 
@@ -18,7 +17,14 @@ key_size = 3
 key_shape = "triangle"
 key_color = "brown"
 
-#leaderboard variables
+rope_size = 3
+rope_shape = "circle"
+rope_color = "tan"
+
+score = 0
+end = 0
+
+#leaderboard variables and lists
 leaderboard_file_name="a122_leaderboard.txt"
 leadernames_list = []
 leader_scores_list = []
@@ -27,16 +33,25 @@ player_name=input("Please enter your name")
 
 #-----initialize turtle-----
 key = trtl.Turtle()
+rope = trtl.Turtle()
 counter = trtl.Turtle()
 click = trtl.Turtle()
 writer = trtl.Turtle()
 
 writer.penup()
 writer.goto(0,0)
+writer.pendown()
 
 key.color(key_color)
 key.shape(key_shape)
 key.shapesize(key_size)
+
+rope.color(rope_color)
+rope.shape(rope_shape)
+rope.shapesize(rope_size)
+rope.penup()
+rope.goto(100,-50)
+rope.pendown()
 
 counter.penup()
 counter.pencolor("Black")
@@ -52,6 +67,7 @@ def calender():
     else:
         print("Incorrect")
 
+#Functions including key
 def open_drawer():
     awnser = input("4 letter word:")
     if awnser == 'rain':
@@ -69,6 +85,7 @@ def clean_key():
 def key_clicked(x,y):
     key.hideturtle()
     escape_tools.append("key")
+#---------------------------------------
 
 def open_book():
     awnser = input("What year was William Shakespeare born in?:")
@@ -105,39 +122,30 @@ def poster():
     print("If we zoom in it looks like the poster has numbers on it, maybe its a number substituation cypher. 10 1 13 5 19")   
 
 def bin():
-    escape_tools.append("rope")
-    if (escape_tools == ['key', 'rope']):
-       print("You have all needed tools to escape.")
+    rope.showturtle()
+    print("Looks like we found a rope. Once you collect it we will ahve everything we need to escape!")
     
+def rope_clicked(x,y):
+    rope.hideturtle()
+    escape_tools.append("rope")
+
+#-----------timer------------
 
 def countdown():
   global timer, timer_up
   counter.clear()
-  if timer <= 0:
-    counter.write("Time's Up", font=font_setup)
-    timer_up = True
-    manage_leaderboard()
+  if(end == 1):
+        counter.write("You escaped", font=font_setup)
+        global score
+        score = timer
+        manage_leaderboard()
   else:
-    counter.write("Timer: " + str(timer), font=font_setup)
-    timer -= 1
-    counter.getscreen().ontimer(countdown, counter_interval) 
+        counter.write("Timer: " + str(timer), font=font_setup)
+        timer -= 1
+        counter.getscreen().ontimer(countdown, counter_interval) 
 
-# manages the leaderboard for top 5 scorers
-def manage_leaderboard():
 
-  global score
-
-  # get the names and scores from the leaderboard file
-  leader_names_list = lb.get_names(leaderboard_file_name)
-  leader_scores_list = lb.get_scores(leaderboard_file_name)
-
-  # show the leaderboard with or without the current player
-  if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
-    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
-    lb.draw_leaderboard(True, leader_names_list, leader_scores_list, score)
-
-  else:
-    lb.draw_leaderboard(False, leader_names_list, leader_scores_list, score)
+#---------screen clciked---------
 
 def click_screen(x,y):
     if (x>20 and x<40):
@@ -170,17 +178,39 @@ def click_screen(x,y):
     elif(x>200 and x<300):
         if(y>0 and y<200):
             if (escape_tools == ['key', 'rope']):
-                wn.clear()
-                wn.bgcolor('blue')
-                writer.pendown()
-                writer.write("You escaped!")
-                timer_up
+                 wn.clear()
+                 wn.bgcolor('blue')
+                 global end
+                 end += 1
+
+                            
+#-------manages the leaderboard for top 5 scorers-------
+def manage_leaderboard():
+
+  global score
+  global key
+
+  # get the names and scores from the leaderboard file
+  leader_names_list = lb.get_names(leaderboard_file_name)
+  leader_scores_list = lb.get_scores(leaderboard_file_name)
+
+  # show the leaderboard with or without the current player
+  if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
+    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
+    lb.draw_leaderboard(True, leader_names_list, leader_scores_list,key, score)
+
+  else:
+    lb.draw_leaderboard(False, leader_names_list, leader_scores_list,key, score)
         
    
 #-----events----------------
 key.hideturtle()
 key.onclick(key_clicked)
+
+rope.hideturtle()
+rope.onclick(rope_clicked)
+
+wn.ontimer(countdown, counter_interval)
 wn.bgpic("Anime.gif")
 wn.onscreenclick(click_screen)
-wn.ontimer(countdown, counter_interval)
 wn.mainloop()
