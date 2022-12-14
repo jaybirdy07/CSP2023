@@ -1,0 +1,186 @@
+# a121_catch_a_turtle.py
+#-----import statements-----
+import turtle as trtl
+import random as rand
+import leaderboard as lb
+
+#-----game configuration----
+wn = trtl.Screen()
+wn.setup(width=1.0, height=1.0)
+
+font_setup = ("Arial", 20, "normal")
+timer = 400
+score = 0
+counter_interval = 1000   #1000 represents 1 second
+timer_up = False
+
+key_size = 3
+key_shape = "triangle"
+key_color = "brown"
+
+#leaderboard variables
+leaderboard_file_name="a122_leaderboard.txt"
+leadernames_list = []
+leader_scores_list = []
+escape_tools = []
+player_name=input("Please enter your name")
+
+#-----initialize turtle-----
+key = trtl.Turtle()
+counter = trtl.Turtle()
+click = trtl.Turtle()
+writer = trtl.Turtle()
+
+writer.penup()
+writer.goto(0,0)
+
+key.color(key_color)
+key.shape(key_shape)
+key.shapesize(key_size)
+
+counter.penup()
+counter.pencolor("Black")
+counter.goto(-300,300)
+counter.pendown
+
+#-----game functions--------
+
+def calender():
+    awnser = input("What does come down but never goes up?:")
+    if awnser == 'rain':
+        print("Correct")
+    else:
+        print("Incorrect")
+
+def open_drawer():
+    awnser = input("4 letter word:")
+    if awnser == 'rain':
+        key.showturtle()
+        print("Congrats you found a key! Although it looks like its dirty, you better clean it off.")
+    else:
+        print("Incorrect")
+
+def clean_key():
+    key.penup()
+    key.goto(120,-60)
+    key.color("gold")
+    print("Congrats you cleand the key! Looks like its to the window. You better hold onto it untill you have everything you need to escape")
+
+def key_clicked(x,y):
+    key.hideturtle()
+    escape_tools.append("key")
+
+def open_book():
+    awnser = input("What year was William Shakespeare born in?:")
+    if awnser == '1564':
+        print("Correct")
+    else:
+        print("Incorrect")
+
+def turn_on_computer():
+   awnser = input("Enter 4 digit password:")
+   if awnser == '1564':
+       print("Welcome. It looks like there is a game running, find the controllers to play.")
+   else:
+       print("Incorrect")
+    
+def trash():
+    awnser = input("It looks like there is a note. Lets see what it says. 'How deep is the deepest part of Lake Erie?:")
+    if awnser == '210':
+        print("Correct")
+    else:
+        print("Incorrect")
+
+def game_controller():
+    awnser = input("3 digit code:")
+    if awnser == '210':
+        print("Looks like the game needs a username.")
+        awnser = input("Username:")
+        if awnser == 'james':
+            print("Welcome. Look in the bin.")
+    else:
+        print("Incorrect")
+
+def poster():
+    print("If we zoom in it looks like the poster has numbers on it, maybe its a number substituation cypher. 10 1 13 5 19")   
+
+def bin():
+    escape_tools.append("rope")
+    if (escape_tools == ['key', 'rope']):
+       print("You have all needed tools to escape.")
+    
+
+def countdown():
+  global timer, timer_up
+  counter.clear()
+  if timer <= 0:
+    counter.write("Time's Up", font=font_setup)
+    timer_up = True
+    manage_leaderboard()
+  else:
+    counter.write("Timer: " + str(timer), font=font_setup)
+    timer -= 1
+    counter.getscreen().ontimer(countdown, counter_interval) 
+
+# manages the leaderboard for top 5 scorers
+def manage_leaderboard():
+
+  global score
+
+  # get the names and scores from the leaderboard file
+  leader_names_list = lb.get_names(leaderboard_file_name)
+  leader_scores_list = lb.get_scores(leaderboard_file_name)
+
+  # show the leaderboard with or without the current player
+  if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
+    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
+    lb.draw_leaderboard(True, leader_names_list, leader_scores_list, score)
+
+  else:
+    lb.draw_leaderboard(False, leader_names_list, leader_scores_list, score)
+
+def click_screen(x,y):
+    if (x>20 and x<40):
+        if (y>30 and y<70):
+          calender()
+    elif (x>-100 and x<0):
+        if (y<-70 and y>-90):
+            open_drawer()
+    elif (x>160 and x<180):
+        if(y>-60 and y<-30):
+            clean_key()
+    elif (x>270 and x<300):
+        if(y>-150 and y<-100):
+            open_book()
+    elif (x<-100 and x>-250):
+        if(y>0 and y<100):
+            turn_on_computer()
+    elif(x>-300 and x<-200):
+        if(y>-200 and y<-100):
+            trash()
+    elif(x>15 and x<70):
+        if(y>-150 and y<-90):
+            game_controller()
+    elif(x>-200 and x<50):
+        if(y>230 and y<260):
+            poster()
+    elif(x>150 and x<250):
+        if(y>-100 and y<-50):
+            bin()
+    elif(x>200 and x<300):
+        if(y>0 and y<200):
+            if (escape_tools == ['key', 'rope']):
+                wn.clear()
+                wn.bgcolor('blue')
+                writer.pendown()
+                writer.write("You escaped!")
+                timer_up
+        
+   
+#-----events----------------
+key.hideturtle()
+key.onclick(key_clicked)
+wn.bgpic("Anime.gif")
+wn.onscreenclick(click_screen)
+wn.ontimer(countdown, counter_interval)
+wn.mainloop()
