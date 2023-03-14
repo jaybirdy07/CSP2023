@@ -19,6 +19,7 @@ arrow_color = "black"
 
 score = 0
 end = 0
+screen = 1
 
 #leaderboard variables and lists
 leaderboard_file_name="a122_leaderboard.txt"
@@ -41,13 +42,13 @@ arrow1.shape("arrow")
 arrow1.shapesize(3)
 arrow1.penup()
 arrow1.right(180)
-arrow1.goto(-300,0)
+arrow1.goto(-300,300)
 
 arrow2.color("black")
 arrow2.shape("arrow")
 arrow2.shapesize(3)
 arrow2.penup()
-arrow2.goto(300,0)
+arrow2.goto(300,300)
 
 writer.penup()
 writer.goto(0,0)
@@ -55,7 +56,7 @@ writer.hideturtle()
 
 counter.penup()
 counter.pencolor("Black")
-counter.goto(-300,300)
+counter.goto(-70,280)
 counter.hideturtle()
 
 
@@ -72,14 +73,17 @@ def frontdoor():
 
 def switch1():
   global arrow1
+  global screen
   wn.bgpic("kitchen.gif")
+  screen += 1
   arrow1.hideturtle()
 
 def switch2():
   global arrow1
+  global screen
   wn.bgpic("frontdoor.gif")
+  screen = 1
   arrow1.showturtle()
-
 
 
 #-----------timer------------
@@ -100,17 +104,26 @@ def countdown():
 
 #---------screen clciked---------
 
-def click_screen(x,y):
+def click_frontdoor(x,y):
   if (x>250 and x<300):
     if (y>-100 and y<50):
         frontdoor()
   elif (x>-320 and x<-300):
-    if (y>-20 and y<20):
+    if (y>280 and y<320):
         switch1()
-  elif (x>300 and x<320):
-      if (y>-20 and y<20):
+  
+def click_kitchen(x,y):
+  if (x>300 and x<320):
+    if (y>280 and y<320):
         switch2()
     
+def click_screen(x,y):
+    if (x>-400 and x<400):
+        if (y>-400 and y<400):
+            if (screen == 1):
+                click_frontdoor(x,y)
+            elif (x>-400 and x<400):
+                click_kitchen(x,y)
                                      
 #-------manages the leaderboard for top 5 scorers-------
 def manage_leaderboard():
@@ -128,6 +141,6 @@ def manage_leaderboard():
 #-----events----------------
 
 wn.ontimer(countdown, counter_interval)
-wn.bgpic("frontdoor.gif")
 wn.onscreenclick(click_screen)
+wn.bgpic("frontdoor.gif")
 wn.mainloop()
