@@ -5,6 +5,9 @@ import random as rand
 import leaderboard as lb
 
 #-----game configuration----
+glove = "glove.gif"
+trtl.register_shape(glove)
+
 wn = trtl.Screen()
 wn.setup(width=1.0, height=1.0)
 
@@ -20,6 +23,8 @@ arrow_color = "black"
 score = 0
 end = 0
 screen = 1
+
+tools = []
 
 #leaderboard variables and lists
 leaderboard_file_name="a122_leaderboard.txt"
@@ -71,6 +76,28 @@ def frontdoor():
     else:
       print("Oh no! It looks like the front door is locked. Find the key to escape.")
 
+'''def jar():
+  finally
+
+def books():
+  finally
+
+def boots():
+  finally
+
+def drawer():
+  finally
+
+def unbrella():
+  finally
+
+def cabnet():
+  finally
+
+def oven():
+  finally
+'''
+
 def switch1():
   global arrow1
   global screen
@@ -114,9 +141,15 @@ def click_frontdoor(x,y):
   
 def click_kitchen(x,y):
   if (x>300 and x<320):
-    if (y>280 and y<320):
+    if (y>100 and y<150):
         switch2()
-    
+  if (x>-200 and x<-150):
+    if (y>100 and y<200):
+      trtl.penup()
+      trtl.sety(100)
+      trtl.setx(-100)
+      trtl.shape(glove)
+
 def click_screen(x,y):
     if (x>-400 and x<400):
         if (y>-400 and y<400):
