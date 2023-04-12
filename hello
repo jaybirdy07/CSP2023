@@ -1,0 +1,214 @@
+#-----import statements-----
+import turtle as trtl
+import random as rand
+import leaderboard as lb
+
+#-----game configuration----
+glove = "glove.gif"
+key = "glove.gif"
+trtl.register_shape(glove)
+
+wn = trtl.Screen()
+wn.setup(width=1.0, height=1.0)
+
+font_setup = ("Arial", 20, "normal")
+timer = 30
+counter_interval = 1000
+timer_up = False
+
+arrow_size = 3
+arrow_shape = "arrow"
+arrow_color = "black"
+
+score = 0
+end = 0
+screen = 1
+
+#leaderboard variables and lists
+leaderboard_file_name="a122_leaderboard.txt"
+leadernames_list = []
+leader_scores_list = []
+escape_tools = []
+player_name=input("Please enter your name: ")
+
+#-----initialize turtle-----
+counter = trtl.Turtle()
+click = trtl.Turtle()
+writer = trtl.Turtle()
+arrow1 = trtl.Turtle()
+arrow2 = trtl.Turtle()
+
+click.hideturtle()
+
+arrow1.color("black")
+arrow1.shape("arrow")
+arrow1.shapesize(3)
+arrow1.penup()
+arrow1.right(180)
+arrow1.goto(-300,300)
+
+arrow2.color("black")
+arrow2.shape("arrow")
+arrow2.shapesize(3)
+arrow2.penup()
+arrow2.goto(300,300)
+
+writer.penup()
+writer.goto(0,0)
+writer.hideturtle()
+
+counter.penup()
+counter.pencolor("Black")
+counter.goto(-70,280)
+counter.hideturtle()
+
+
+#-----game functions--------
+
+def frontdoor():
+    if (escape_tools == ['key', 'shiner', 'cloth', 'glove']):
+      wn.clear()
+      wn.bgcolor('blue')
+      global end
+      end += 1
+    else:
+      print("Oh no! It looks like the front door is locked. Find the key to escape.")
+
+def oven():
+  if (escape_tools == ['glove']):
+    trtl.register_shape(key)
+    trtl.penup()
+    trtl.sety(0)
+    trtl.setx(0)
+    trtl.shape(key)
+  else:
+    print("you dont want to burn yourself! Find the oven mitt.")
+
+def sandjar():
+    print("looks like tehres a peice of paper in here. Lets see what it says: 1845")  
+    
+def switch1():
+  global arrow1
+  global screen
+  wn.bgpic("kitchen.gif")
+  screen += 1
+  arrow1.hideturtle()
+
+def switch2():
+  global arrow1
+  global screen
+  wn.bgpic("frontdoor.gif")
+  screen = 1
+  arrow1.showturtle()
+
+def sink():
+    input("Oh No! Theres a lock on the sink thqt needs a 6 digit combination: ")
+    if (escape_tools == ["glove", "key"]):
+        print("The key loolks raedy to use!")
+    else:
+        print("You dont have anything to clean.")
+
+def endgame():
+    global end
+    if (escape_tools == ["glove", "key", "water"]):
+        for index in range(5):
+            wn.clear()
+            wn.delay(100)
+            wn.bgcolor('green')
+        end +=1
+    else:
+        for index in range (5):
+          wn.clear()
+          wn.delay(100)
+          wn.bgcolor('red')
+        end +=1
+
+
+#-----------timer------------
+
+def countdown():
+  global timer, timer_up
+  counter.clear()
+  if(end == 1):
+    if(escape_tools == ["glove", "key", "water"]):
+        counter.write("You escaped", font=font_setup)
+        global score
+        score = timer
+        manage_leaderboard()
+    else:
+        counter.write("You did not escape", font=font_setup)
+        score = timer
+        manage_leaderboard()
+  else:
+    counter.write("Timer: " + str(timer), font=font_setup)
+    timer -= 1
+    counter.getscreen().ontimer(countdown, counter_interval) 
+
+  
+
+#---------screen clciked---------
+
+def click_frontdoor(x,y):
+    if (timer <= 0 or escape_tools == ["glove", "key", "water"]):
+        endgame()    
+    else:
+        if (x>250 and x<300):
+            if (y>-100 and y<50):
+                frontdoor()
+        elif (x>-320 and x<-300):
+            if (y>280 and y<320):
+                switch1()
+  
+def click_kitchen(x,y):
+     if (timer <= 0 or escape_tools == ["glove", "key", "water"]):
+        endgame()    
+     else:
+        if (x>-200 and x<-150):
+            if (y>100 and y<200):
+                awnser = input("Enter a 4 digt code: ")
+                if (awnser == '1845'):
+                    trtl.penup()
+                    trtl.sety(100)
+                    trtl.setx(-100)
+                    trtl.shape(glove)
+                    escape_tools.append("glove")
+                else:
+                    print("Wrong")
+        elif (x>-150 and x<-100):
+            if (y>50 and y<100):  
+                trtl.hideturtle()
+        elif (x>-50 and x<50):
+            if (y>-100 and y<0):
+                oven()
+        elif (x>300 and x<320):
+            if (y>280 and y<320):
+                switch2()
+    
+
+def click_screen(x,y):
+    if (x>-400 and x<400):
+        if (y>-400 and y<400):
+            if (screen == 1):
+                click_frontdoor(x,y)
+            elif (screen == 2):
+                click_kitchen(x,y)
+                                     
+#-------manages the leaderboard for top 5 scorers-------
+def manage_leaderboard():
+  global score
+  global key
+  leader_names_list = lb.get_names(leaderboard_file_name)
+  leader_scores_list = lb.get_scores(leaderboard_file_name)
+  if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
+    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
+    lb.draw_leaderboard(True, leader_names_list, leader_scores_list,key, score)
+  else:
+    lb.draw_leaderboard(False, leader_names_list, leader_scores_list,key, score)
+        
+   
+#-----events----------------
+
+wn.ontimer(countdown, counter_interval)
+wn.onscreenclick(click_screen)
+wn.bgpic("frontdoor.gif")
+wn.mainloop()
