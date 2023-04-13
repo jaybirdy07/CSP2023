@@ -1,9 +1,8 @@
-#-----import statements-----
-import turtle as trtl
-import random as rand
-import leaderboard as lb
+#import statements
+import turtle as trtl #Trutle library
+import leaderboard as lb #PLTW
 
-#-----game configuration----
+#game configuration
 glove = "glove.gif"
 key = "glove.gif"
 trtl.register_shape(glove)
@@ -31,7 +30,7 @@ leader_scores_list = []
 escape_tools = []
 player_name=input("Please enter your name: ")
 
-#-----initialize turtle-----
+#initialize turtle
 counter = trtl.Turtle()
 click = trtl.Turtle()
 writer = trtl.Turtle()
@@ -63,7 +62,7 @@ counter.goto(-70,280)
 counter.hideturtle()
 
 
-#-----game functions--------
+#game functions
 
 def frontdoor():
     if (escape_tools == ['key', 'shiner', 'cloth', 'glove']):
@@ -124,8 +123,9 @@ def endgame():
         end +=1
 
 
-#-----------timer------------
+#timer
 
+#Writen during a PLTW lesson
 def countdown():
   global timer, timer_up
   counter.clear()
@@ -139,6 +139,8 @@ def countdown():
         counter.write("You did not escape", font=font_setup)
         score = timer
         manage_leaderboard()
+  elif(timer == 0):
+    endgame()
   else:
     counter.write("Timer: " + str(timer), font=font_setup)
     timer -= 1
@@ -146,10 +148,10 @@ def countdown():
 
   
 
-#---------screen clciked---------
+#screen clciked
 
 def click_frontdoor(x,y):
-    if (timer <= 0 or escape_tools == ["glove", "key", "water"]):
+    if (escape_tools == ["glove", "key", "water"]):
         endgame()    
     else:
         if (x>250 and x<300):
@@ -160,29 +162,29 @@ def click_frontdoor(x,y):
                 switch1()
   
 def click_kitchen(x,y):
-     if (timer <= 0 or escape_tools == ["glove", "key", "water"]):
+  if (escape_tools == ["glove", "key", "water"]):
         endgame()    
-     else:
-        if (x>-200 and x<-150):
-            if (y>100 and y<200):
-                awnser = input("Enter a 4 digt code: ")
-                if (awnser == '1845'):
-                    trtl.penup()
-                    trtl.sety(100)
-                    trtl.setx(-100)
-                    trtl.shape(glove)
-                    escape_tools.append("glove")
-                else:
-                    print("Wrong")
-        elif (x>-150 and x<-100):
-            if (y>50 and y<100):  
-                trtl.hideturtle()
-        elif (x>-50 and x<50):
-            if (y>-100 and y<0):
-                oven()
-        elif (x>300 and x<320):
-            if (y>280 and y<320):
-                switch2()
+  else:
+    if (x>-200 and x<-150):
+      if (y>100 and y<200):
+        awnser = input("Enter a 4 digt code: ")
+        if (awnser == '1845'):
+          trtl.penup()
+          trtl.sety(100)
+          trtl.setx(-100)
+          trtl.shape(glove)
+        else:
+          print("Wrong")
+    elif (x>-150 and x<-100):
+      if (y>50 and y<100):  
+        trtl.hideturtle()
+        escape_tools.append("glove")
+    elif (x>-50 and x<50):
+      if (y>-100 and y<0):
+        oven()
+    elif (x>300 and x<320):
+      if (y>280 and y<320):
+        switch2()
     
 
 def click_screen(x,y):
@@ -193,7 +195,9 @@ def click_screen(x,y):
             elif (screen == 2):
                 click_kitchen(x,y)
                                      
-#-------manages the leaderboard for top 5 scorers-------
+#manages the leaderboard for top 5 scorers
+
+#Taken from PLTW
 def manage_leaderboard():
   global score
   global key
@@ -206,7 +210,7 @@ def manage_leaderboard():
     lb.draw_leaderboard(False, leader_names_list, leader_scores_list,key, score)
         
    
-#-----events----------------
+#events
 
 wn.ontimer(countdown, counter_interval)
 wn.onscreenclick(click_screen)
