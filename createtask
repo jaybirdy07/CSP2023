@@ -1,19 +1,17 @@
-# a121_catch_a_turtle.py
-#-----import statements-----
-import turtle as trtl
-import random as rand
-import leaderboard as lb
+#import statements
+import turtle as trtl #Trutle library
+import leaderboard as lb #PLTW
 
-#-----game configuration----
-glove = "glove.gif"
+#game configuration
+glove = "glove.gif" #found on the internet
 trtl.register_shape(glove)
 
 wn = trtl.Screen()
 wn.setup(width=1.0, height=1.0)
 
 font_setup = ("Arial", 20, "normal")
-timer = 400
-counter_interval = 1000   #1000 represents 1 second
+timer =120
+counter_interval = 1000
 timer_up = False
 
 arrow_size = 3
@@ -24,8 +22,6 @@ score = 0
 end = 0
 screen = 1
 
-tools = []
-
 #leaderboard variables and lists
 leaderboard_file_name="a122_leaderboard.txt"
 leadernames_list = []
@@ -33,12 +29,13 @@ leader_scores_list = []
 escape_tools = []
 player_name=input("Please enter your name: ")
 
-#-----initialize turtle-----
+#initialize turtle
 counter = trtl.Turtle()
 click = trtl.Turtle()
 writer = trtl.Turtle()
 arrow1 = trtl.Turtle()
 arrow2 = trtl.Turtle()
+key = trtl.Turtle()
 
 click.hideturtle()
 
@@ -49,6 +46,7 @@ arrow1.penup()
 arrow1.right(180)
 arrow1.goto(-300,300)
 
+arrow2.hideturtle()
 arrow2.color("black")
 arrow2.shape("arrow")
 arrow2.shapesize(3)
@@ -65,100 +63,161 @@ counter.goto(-70,280)
 counter.hideturtle()
 
 
-#-----game functions--------
+
+#game functions
 
 def frontdoor():
-    if (escape_tools == ['key', 'shiner', 'cloth']):
-      wn.clear()
-      wn.bgcolor('blue')
-      global end
-      end += 1
+    if (escape_tools == ['glove','key','water']):
+      endgame()
+    elif (escape_tools == ['glove','key']):
+        print("The key seems to be too dirty to fit in the hole. Try and clean it off.")
     else:
       print("Oh no! It looks like the front door is locked. Find the key to escape.")
 
-'''def jar():
-  finally
-
-def books():
-  finally
-
-def boots():
-  finally
-
-def drawer():
-  finally
-
-def unbrella():
-  finally
-
-def cabnet():
-  finally
-
 def oven():
-  finally
-'''
+  answer = input("A 4 letter word: ")
+  if (answer == "noon"):
+    if (escape_tools == ['glove']):
+        key = "key.gif"#found on the internet
+        trtl.register_shape(key)
+        trtl.penup()
+        trtl.sety(5)
+        trtl.setx(0)
+        trtl.shape(key)
+        trtl.showturtle()
+    else:
+        print("you dont want to burn yourself! Find the oven mitt.")
+  else:
+    print("Incorrect")
+
+def sandjar():
+    print("It looks like theres a picture buried in here. Its captioned: Spring Break 2001")  
+
+def book():
+    print("It seems this book has a riddle in it: What four-letter word can be written forward, backward, or upside down, and can still be read from left to right?") 
+
+def waterbottle():
+    if (escape_tools == ['glove', 'key']):
+        answer = input("There seems to be a 3 color combination lock on the waterbottle lid: ")
+        if (answer == 'white, yellow, and orange'):
+            print("Congrats! The waterbottle top came off and you were able to wash your key.")
+            escape_tools.append('water')
+    else: 
+        print("Water does sound refreshing right know but you better save it for later.")
 
 def switch1():
   global arrow1
   global screen
-  wn.bgpic("kitchen.gif")
+  wn.bgpic("kitchen.gif")#found on the internet
   screen += 1
   arrow1.hideturtle()
+  arrow2.showturtle()
 
 def switch2():
   global arrow1
   global screen
-  wn.bgpic("frontdoor.gif")
+  wn.bgpic("frontdoor.gif")#found on the internet
   screen = 1
   arrow1.showturtle()
 
+def endgame():
+    global end
+    if (escape_tools == ["glove", "key", "water"]):
+        for index in range(5):
+            wn.clear()
+            wn.delay(100)
+            wn.bgcolor('green')
+        end += 1
+    else:
+        for index in range(5):
+            wn.clear()
+            wn.delay(100)
+            wn.bgcolor('red')
+        counter.write("You did not escape", font=font_setup)
+        global score
+        score = timer
+        manage_leaderboard()
+    
+       
 
-#-----------timer------------
+#timer
 
+#Writen during a PLTW lesson
 def countdown():
+  global end
   global timer, timer_up
   counter.clear()
   if(end == 1):
-    counter.write("You escaped", font=font_setup)
-    global score
-    score = timer
-    manage_leaderboard()
+        global score
+        score = timer
+        counter.write("You escaped", font=font_setup)
+        manage_leaderboard()
+  elif(timer == 0):
+    endgame()
   else:
     counter.write("Timer: " + str(timer), font=font_setup)
     timer -= 1
     counter.getscreen().ontimer(countdown, counter_interval) 
 
+  
 
-#---------screen clciked---------
+#screen clciked
 
 def click_frontdoor(x,y):
-  if (x>250 and x<300):
-    if (y>-100 and y<50):
-        frontdoor()
-  elif (x>-320 and x<-300):
-    if (y>280 and y<320):
-        switch1()
+    if (x>250 and x<300):
+        if (y>-100 and y<50):
+         frontdoor()
+    elif (x>-300 and x<-275):
+        if (y>-50 and y<0):
+         sandjar()
+    elif (x>-115 and x<-100):
+        if(y>-100 and y<-50):
+            book()
+    elif (x>-320 and x<-300):
+        if (y>280 and y<320):
+         switch1()
   
 def click_kitchen(x,y):
-  if (x>300 and x<320):
-    if (y>100 and y<150):
+    if (x>-200 and x<-150):
+      if (y>100 and y<200):
+        awnser = input("Enter a 4 digt code: ")
+        if (awnser == '2001'):
+          trtl.penup()
+          trtl.sety(100)
+          trtl.setx(-100)
+          trtl.shape(glove)
+        else:
+          print("Wrong")
+    elif (x>-150 and x<-115):
+      if (y>50 and y<100):  
+        trtl.hideturtle()
+        escape_tools.append("glove")
+    elif (x>-115 and x<-90):
+      if (y>-50 and y<10):
+        waterbottle()
+    elif (x>-50 and x<50):
+      if (y>-100 and y<-50):
+        oven()
+      elif (y>0 and y<10):
+        trtl.hideturtle()
+        escape_tools.append("key")
+    elif (x>300 and x<320):
+      if (y>280 and y<320):
         switch2()
-  if (x>-200 and x<-150):
-    if (y>100 and y<200):
-      trtl.penup()
-      trtl.sety(100)
-      trtl.setx(-100)
-      trtl.shape(glove)
+    
 
 def click_screen(x,y):
     if (x>-400 and x<400):
         if (y>-400 and y<400):
             if (screen == 1):
                 click_frontdoor(x,y)
-            elif (x>-400 and x<400):
+            elif (screen == 2):
                 click_kitchen(x,y)
                                      
-#-------manages the leaderboard for top 5 scorers-------
+#manages the leaderboard for top 5 scorers
+
+
+#Taken from PLTW
 def manage_leaderboard():
   global score
   global key
@@ -171,9 +230,9 @@ def manage_leaderboard():
     lb.draw_leaderboard(False, leader_names_list, leader_scores_list,key, score)
         
    
-#-----events----------------
+#events
 
 wn.ontimer(countdown, counter_interval)
 wn.onscreenclick(click_screen)
-wn.bgpic("frontdoor.gif")
+wn.bgpic("frontdoor.gif") #found on the internet
 wn.mainloop()
