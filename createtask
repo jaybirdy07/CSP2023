@@ -75,20 +75,21 @@ def frontdoor():
       print("Oh no! It looks like the front door is locked. Find the key to escape.")
 
 def oven():
-  answer = input("A 4 letter word: ")
-  if (answer == "noon"):
     if (escape_tools == ['glove']):
-        key = "key.gif"#found on the internet
-        trtl.register_shape(key)
-        trtl.penup()
-        trtl.sety(5)
-        trtl.setx(0)
-        trtl.shape(key)
-        trtl.showturtle()
+        answer = input("A 4 letter word: ")
+        if (answer == "noon"):
+            key = "key.gif"#found on the internet
+            trtl.register_shape(key)
+            trtl.penup()
+            trtl.sety(5)
+            trtl.setx(0)
+            trtl.shape(key)
+            trtl.showturtle()
+        else:
+            print("Incorrect")
     else:
         print("you dont want to burn yourself! Find the oven mitt.")
-  else:
-    print("Incorrect")
+
 
 def sandjar():
     print("It looks like theres a picture buried in here. Its captioned: Spring Break 2001")  
