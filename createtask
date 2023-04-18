@@ -1,6 +1,6 @@
 #import statements
 import turtle as trtl #Trutle library
-import leaderboard as lb #PLTW
+import leaderboard as lb #A PLTW writen file
 
 #game configuration
 glove = "glove.gif" #found gif on the internet
@@ -38,6 +38,7 @@ arrow2 = trtl.Turtle()
 key = trtl.Turtle()
 
 click.hideturtle()
+key.hideturtle()
 
 arrow1.color("black")
 arrow1.shape("arrow")
@@ -68,6 +69,8 @@ counter.hideturtle()
 
 def frontdoor():
     if (escape_tools == ['glove','key','water']):
+      wn.clear()
+      counter.clear()
       endgame()
     elif (escape_tools == ['glove','key']):
         print("The key seems to be too dirty to fit in the hole. Try and clean it off.")
@@ -123,22 +126,25 @@ def switch2():
 
 def endgame():
     global end
+    counter.clear()
     if (escape_tools == ["glove", "key", "water"]):
-        for index in range(5):
-            wn.delay(1000)
-            wn.clearscreen()
+        count = 0
+        while(count<5):
+            wn.bgcolor('white')
+            wn.delay(50)
             wn.bgcolor('green')
-            print("HI")
-        end += 1
+            counter.clear()
+            counter.write("You escaped", font=font_setup)
+            count += 1
     else:
-        for index in range(5):
-            wn.clearscreen()
-            wn.delay(1000)
+        while(count<5):
+            wn.bgcolor('white')
+            wn.delay(100)
             wn.bgcolor('red')
-        counter.write("You did not escape", font=font_setup)
-        global score
-        score = timer
-        manage_leaderboard()
+            counter.clear()
+            counter.write("You did not escape", font=font_setup)
+            count += 1
+    end += 1    
     
        
 
@@ -152,11 +158,13 @@ def countdown():
   if(end == 1):
         global score
         score = timer
-        counter.write("You escaped", font=font_setup)
+        counter.clear()
+        counter.write("Leaderboard", font=font_setup)
         manage_leaderboard()
   elif(timer == 0):
+    wn.clear()
     endgame()
-  else:
+  elif(timer>score):
     counter.write("Timer: " + str(timer), font=font_setup)
     timer -= 1
     counter.getscreen().ontimer(countdown, counter_interval) 
