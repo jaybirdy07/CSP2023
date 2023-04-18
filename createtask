@@ -3,7 +3,7 @@ import turtle as trtl #Trutle library
 import leaderboard as lb #PLTW
 
 #game configuration
-glove = "glove.gif" #found on the internet
+glove = "glove.gif" #found gif on the internet
 trtl.register_shape(glove)
 
 wn = trtl.Screen()
@@ -88,7 +88,7 @@ def oven():
         else:
             print("Incorrect")
     else:
-        print("you dont want to burn yourself! Find the oven mitt.")
+        print("You dont want to burn yourself! Find the oven mitt.")
 
 
 def sandjar():
@@ -109,7 +109,7 @@ def waterbottle():
 def switch1():
   global arrow1
   global screen
-  wn.bgpic("kitchen.gif")#found on the internet
+  wn.bgpic("kitchen.gif")#found gif on the internet
   screen += 1
   arrow1.hideturtle()
   arrow2.showturtle()
@@ -117,7 +117,7 @@ def switch1():
 def switch2():
   global arrow1
   global screen
-  wn.bgpic("frontdoor.gif")#found on the internet
+  wn.bgpic("frontdoor.gif")#found gif on the internet
   screen = 1
   arrow1.showturtle()
 
@@ -125,14 +125,15 @@ def endgame():
     global end
     if (escape_tools == ["glove", "key", "water"]):
         for index in range(5):
-            wn.clear()
-            wn.delay(100)
+            wn.delay(1000)
+            wn.clearscreen()
             wn.bgcolor('green')
+            print("HI")
         end += 1
     else:
         for index in range(5):
-            wn.clear()
-            wn.delay(100)
+            wn.clearscreen()
+            wn.delay(1000)
             wn.bgcolor('red')
         counter.write("You did not escape", font=font_setup)
         global score
@@ -143,7 +144,7 @@ def endgame():
 
 #timer
 
-#Writen during a PLTW lesson
+#Half writen during a PLTW lesson
 def countdown():
   global end
   global timer, timer_up
@@ -235,5 +236,5 @@ def manage_leaderboard():
 
 wn.ontimer(countdown, counter_interval)
 wn.onscreenclick(click_screen)
-wn.bgpic("frontdoor.gif") #found on the internet
+wn.bgpic("frontdoor.gif") #found gif on the internet
 wn.mainloop()
