@@ -1,0 +1,58 @@
+import time
+import matplotlib.pyplot as plt
+import numpy as np
+
+BlueWhalePopulationFile = open("BlueWhale.txt")
+BlueWhaleList = BlueWhalePopulationFile.readlines()
+
+BowheadWhalePopulationFile = open("BowheadWhale.txt")
+BowheadWhaleList = BowheadWhalePopulationFile.readlines()
+
+FinWhalePopulationFile = open("FinWhale.txt")
+FinWhaleList = FinWhalePopulationFile.readlines()
+
+GreyWhalePopulationFile = open("GreyWhale.txt")
+GreyWhaleList = GreyWhalePopulationFile.readlines()
+
+HumpbackWhalePopulationFile = open("HumpbackWhale.txt")
+HumpbackWhaleList = HumpbackWhalePopulationFile.readlines()
+
+
+fig = plt.figure()
+ax = plt.subplot()
+x = np.arange(10)
+y = 2.5 * np.sin(x / 20 * np.pi)
+yerr = np.linspace(0.05, 0.3, 10)
+
+#print(crimeList)
+
+for i in range(len(BlueWhaleList)):
+    BlueWhaleList[i] = int(BlueWhaleList[i])
+
+for i in range(len(BowheadWhaleList)):
+    BowheadWhaleList[i] = int(BowheadWhaleList[i])
+
+for i in range(len(FinWhaleList)):
+    FinWhaleList[i] = int(FinWhaleList[i])
+
+for i in range(len(GreyWhaleList)):
+    GreyWhaleList[i] = int(GreyWhaleList[i])
+
+for i in range(len(HumpbackWhaleList)):
+    HumpbackWhaleList[i] = int(HumpbackWhaleList[i])
+
+
+plt.plot([1890,1950, 2001],BlueWhaleList,'gv-', color='tab:blue')
+plt.plot([1890,1950, 2001],BowheadWhaleList,'gv-', color='tab:green')
+plt.plot([1890,1950, 2001],FinWhaleList,'gv-', color='tab:red')
+plt.plot([1890,1950, 2001],GreyWhaleList,'gv-', color='tab:pink')
+plt.plot([1890,1950, 2001],HumpbackWhaleList,'gv-', color='tab:orange')
+plt.axis([1890,2002,0,800000])
+
+ax.set_ylabel('Popualtion', color='tab:blue')
+ax.set_xlabel('Years', color='blue')
+ax.set_title("Whale Popualtion From 1890 to 2001", fontsize=15)
+plt.errorbar(x, y + 1, yerr=yerr, label='Blue Whale')
+
+plt.legend(loc='lower right')
+plt.show()
