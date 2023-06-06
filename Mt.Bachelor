@@ -1,0 +1,86 @@
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+ #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
+#endif
+
+#define BUTTON_PIN   2
+#define BUTTON_PIN2   3
+#define BUTTON_PIN3   4
+
+#define PIXEL_PIN    6  // Digital IO pin connected to the NeoPixels.
+
+#define PIXEL_COUNT 60  // Number of NeoPixels
+
+// Declare our NeoPixel strip object:
+Adafruit_NeoPixel strip(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
+
+boolean oldState = HIGH;
+int     mode     = 0;    // Currently-active animation mode, 0-9
+
+void setup() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(BUTTON_PIN2, INPUT_PULLUP);
+  pinMode(BUTTON_PIN3, INPUT_PULLUP);
+  strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
+  strip.show();
+  pixels.begin();
+  pixels.show();// Initialize all pixels to 'off'
+}
+
+void loop() {
+  // Get current button state.
+  boolean newState = digitalRead(BUTTON_PIN);
+  // Check if state changed from high to low (button press).
+  if((newState == LOW) && (oldState == HIGH)) {
+    // Short delay to debounce button.
+    delay(20);
+    // Check if button is still low after debounce.
+    newState = digitalRead(BUTTON_PIN);
+    if(newState == LOW) {      // Yes, still low   
+          uint32_t white = pixels.Color(0, 0, 0);
+          pixels.fill(white, 0, 60); // Red         
+          uint32_t blue = pixels.Color(0, 0, 225);
+          pixels.fill(blue, 10, 7);
+          pixels.fill(blue, 30, 4); // Red
+          pixels.show(); // Blue
+      }
+  }
+
+ // Get current button state.
+  newState = digitalRead(BUTTON_PIN3);
+  // Check if state changed from high to low (button press).
+  if((newState == LOW) && (oldState == HIGH)) {
+    // Short delay to debounce button.
+    delay(20);
+    // Check if button is still low after debounce.
+    newState = digitalRead(BUTTON_PIN3);
+    if(newState == LOW) {  // Yes, still low
+          uint32_t white = pixels.Color(0, 0, 0);
+          pixels.fill(white, 0, 60); // Red         
+          uint32_t red = pixels.Color(255, 0, 0);
+          pixels.fill(red, 5, 3); // Red
+          pixels.show();
+      }
+  }
+
+   // Get current button state.
+  newState = digitalRead(BUTTON_PIN2);
+  // Check if state changed from high to low (button press).
+  if((newState == LOW) && (oldState == HIGH)) {
+    // Short delay to debounce button.
+    delay(20);
+    // Check if button is still low after debounce.
+    newState = digitalRead(BUTTON_PIN2);
+    if(newState == LOW) {      // Yes, still low  
+          uint32_t white = pixels.Color(0, 0, 0);
+          pixels.fill(white, 0, 60); // Red   
+          uint32_t green = pixels.Color(0, 225, 0);
+          pixels.fill(green, 21, 10); // green
+          pixels.show();    // Green
+      }
+    }
+
+  oldState = newState;
+}
+
