@@ -1,4 +1,6 @@
 #include <Adafruit_NeoPixel.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
 #ifdef __AVR__
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
@@ -18,6 +20,8 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + N
 boolean oldState = HIGH;
 int     mode     = 0;    // Currently-active animation mode, 0-9
 
+LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
 void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(BUTTON_PIN2, INPUT_PULLUP);
@@ -26,6 +30,10 @@ void setup() {
   strip.show();
   pixels.begin();
   pixels.show();// Initialize all pixels to 'off'
+  lcd.init();                      // initialize the lcd 
+  lcd.init(); 
+  lcd.backlight();
+}
 }
 
 void loop() {
@@ -44,6 +52,9 @@ void loop() {
           pixels.fill(blue, 10, 7);
           pixels.fill(blue, 30, 4); // Red
           pixels.show(); // Blue
+          lcd.setCursor(3,0);
+          lcd.print("Pine Martin");
+          lcd.clear();
       }
   }
 
@@ -61,6 +72,9 @@ void loop() {
           uint32_t red = pixels.Color(255, 0, 0);
           pixels.fill(red, 5, 3); // Red
           pixels.show();
+          lcd.setCursor(3,0);
+          lcd.print("Sunrise");
+          lcd.clear();
       }
   }
 
@@ -78,34 +92,12 @@ void loop() {
           uint32_t green = pixels.Color(0, 225, 0);
           pixels.fill(green, 21, 10); // green
           pixels.show();    // Green
+          lcd.setCursor(3,0);
+          lcd.print("Skyliner");
+          lcd.clear();
       }
     }
 
   oldState = newState;
 }
 
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h>
-
-LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-
-void setup()
-{
-  lcd.init();                      // initialize the lcd 
-  lcd.init();
-  // Print a message to the LCD.
-  lcd.backlight();
-  lcd.setCursor(3,0);
-  lcd.print("Hello, world!");
-  lcd.setCursor(2,1);
-  lcd.print("Ywrobot Arduino!");
-   lcd.setCursor(0,2);
-  lcd.print("Arduino LCM IIC 2004");
-   lcd.setCursor(2,3);
-  lcd.print("Power By Ec-yuan!");
-}
-
-
-void loop()
-{
-}
