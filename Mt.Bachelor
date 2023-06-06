@@ -54,7 +54,6 @@ void loop() {
           pixels.show(); // Blue
           lcd.setCursor(3,0);
           lcd.print("Pine Martin");
-          lcd.clear();
       }
   }
 
@@ -72,9 +71,9 @@ void loop() {
           uint32_t red = pixels.Color(255, 0, 0);
           pixels.fill(red, 5, 3); // Red
           pixels.show();
+          lcd.clear();
           lcd.setCursor(3,0);
           lcd.print("Sunrise");
-          lcd.clear();
       }
   }
 
@@ -92,9 +91,9 @@ void loop() {
           uint32_t green = pixels.Color(0, 225, 0);
           pixels.fill(green, 21, 10); // green
           pixels.show();    // Green
+          lcd.clear();
           lcd.setCursor(3,0);
           lcd.print("Skyliner");
-          lcd.clear();
       }
     }
 
